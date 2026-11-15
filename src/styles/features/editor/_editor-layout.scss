@@ -1,0 +1,15 @@
+.editor-heading {
+  align-items: center;
+  margin-bottom: 26px;
+}
+
+.editor-heading h1 {
+  font-size: 27px;
+}
+
+.editor-grid {
+  display: grid;
+  grid-template-columns: minmax(180px, .85fr) minmax(300px, 1.7fr) minmax(180px, .85fr);
+  grid-template-rows: 340px 250px;
+  gap: 12px;
+}

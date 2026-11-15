@@ -1,0 +1,54 @@
+@use "../abstracts/tokens" as *;
+
+.topbar {
+  height: 64px;
+  padding: 0 34px;
+  border-bottom: 1px solid $border;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #111218a8;
+}
+
+.breadcrumb {
+  font-size: 11px;
+  color: #b9bbc5;
+}
+
+.breadcrumb span {
+  color: $subtle;
+  padding: 0 8px;
+}
+
+.topbar-right {
+  display: flex;
+  gap: 18px;
+  align-items: center;
+}
+
+.local-pill {
+  font-size: 10px;
+  color: $muted;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.local-pill i {
+  margin: 0;
+  width: 6px;
+  height: 6px;
+}
+
+.avatar {
+  width: 29px;
+  height: 29px;
+  border: 1px solid #514b76;
+  border-radius: 9px;
+  display: grid;
+  place-items: center;
+  color: $accent-2;
+  background: #28243a;
+  font-size: 12px;
+  font-weight: 700;
+}

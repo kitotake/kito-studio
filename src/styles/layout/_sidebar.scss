@@ -1,0 +1,130 @@
+@use "../abstracts/tokens" as *;
+
+.sidebar {
+  width: 238px;
+  flex: 0 0 238px;
+  min-height: 100vh;
+  padding: 25px 16px 18px;
+  border-right: 1px solid $border;
+  background: rgba(17,18,24,.94);
+  display: flex;
+  flex-direction: column;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 0 10px 40px;
+  letter-spacing: .15em;
+}
+
+.brand-mark {
+  width: 36px;
+  height: 36px;
+  border-radius: 11px;
+  display: grid;
+  place-items: center;
+  font-size: 21px;
+  font-weight: 800;
+  color: white;
+  background: linear-gradient(145deg, #a99bff, #6555d9);
+  box-shadow: 0 6px 22px #7663ff40;
+}
+
+.brand strong, .brand span {
+  display: block;
+  line-height: 1.1;
+}
+
+.brand strong {
+  font-size: 14px;
+  letter-spacing: .22em;
+}
+
+.brand span {
+  margin-top: 4px;
+  font-size: 9px;
+  color: $muted;
+  letter-spacing: .36em;
+}
+
+.sidebar-label {
+  padding: 0 10px 12px;
+}
+
+.nav-item {
+  width: 100%;
+  border: 1px solid transparent;
+  color: #a7aab5;
+  background: transparent;
+  border-radius: 8px;
+  padding: 11px 12px;
+  text-align: left;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  font-size: 12px;
+  margin-bottom: 4px;
+}
+
+.nav-item:hover, .nav-item.active {
+  color: $text;
+  background: #252333;
+  border-color: #39334f;
+}
+
+.nav-item.active {
+  box-shadow: inset 2px 0 $accent;
+}
+
+.nav-icon {
+  width: 16px;
+  text-align: center;
+  font-size: 17px;
+}
+
+.sidebar-bottom {
+  margin-top: auto;
+}
+
+.system-card {
+  border: 1px solid $border;
+  background: $surface;
+  border-radius: 9px;
+  padding: 11px;
+  display: flex;
+  gap: 9px;
+  align-items: flex-start;
+}
+
+.status-dot, .local-pill i {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: $success;
+  display: inline-block;
+  margin-top: 4px;
+  box-shadow: 0 0 10px #56c99a66;
+}
+
+.system-card strong, .system-card small {
+  display: block;
+}
+
+.system-card strong {
+  font-size: 10px;
+  font-weight: 650;
+}
+
+.system-card small {
+  margin-top: 4px;
+  font-size: 9px;
+  color: $muted;
+}
+
+.version {
+  color: $subtle;
+  font-size: 9px;
+  padding: 17px 5px 0;
+}

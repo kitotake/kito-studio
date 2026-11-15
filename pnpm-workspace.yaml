@@ -1,0 +1,11 @@
+packages:
+  - 'packages/*'
+
+# pnpm bloque par défaut les scripts d'installation des dépendances.
+# esbuild (utilisé par Vite) a besoin du sien pour installer son binaire natif.
+# `onlyBuiltDependencies` : pnpm 10 — `allowBuilds` : pnpm 11+.
+onlyBuiltDependencies:
+  - esbuild
+allowBuilds:
+  esbuild: true
+  '@parcel/watcher': false

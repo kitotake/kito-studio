@@ -1,0 +1,63 @@
+@use "../../abstracts/tokens" as *;
+
+.bottom-panel {
+  margin-top: 26px;
+  border: 1px solid $border;
+  border-radius: 12px;
+  background: #17191f;
+  padding: 23px;
+}
+
+.section-heading {
+  align-items: center;
+}
+
+.section-heading h2 {
+  font-size: 16px;
+  margin: 8px 0 0;
+}
+
+.milestones {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-top: 23px;
+}
+
+.milestone {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  min-width: 0;
+}
+
+.milestone > span {
+  flex: 0 0 26px;
+  height: 26px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  border: 1px solid $border;
+  color: $muted;
+  font-size: 9px;
+}
+
+.milestone.done > span {
+  border-color: #2e7059;
+  color: $success;
+  background: #18362c;
+}
+
+.milestone strong, .milestone small {
+  display: block;
+}
+
+.milestone strong {
+  font-size: 9px;
+}
+
+.milestone small {
+  margin-top: 4px;
+  color: $subtle;
+  font-size: 8px;
+}

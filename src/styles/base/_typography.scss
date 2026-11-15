@@ -1,0 +1,15 @@
+@use "../abstracts/tokens" as *;
+
+.sidebar-label, .eyebrow, .card-kicker {
+  font-size: 9px;
+  font-weight: 750;
+  letter-spacing: .16em;
+  color: $subtle;
+}
+
+h1 {
+  font-size: clamp(27px, 3vw, 38px);
+  letter-spacing: -.045em;
+  margin: 12px 0 9px;
+  font-weight: 680;
+}

@@ -1,0 +1,21 @@
+@use "../../abstracts/tokens" as *;
+
+.inspector-panel .property {
+  padding: 13px 12px;
+  border-bottom: 1px solid #282b34;
+}
+
+.property small, .property strong {
+  display: block;
+}
+
+.property small {
+  color: $subtle;
+  font-size: 8px;
+  margin-bottom: 6px;
+}
+
+.property strong {
+  color: #d7d8df;
+  font-size: 10px;
+}

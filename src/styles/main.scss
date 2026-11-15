@@ -1,0 +1,20 @@
+// Point d'entrée des styles. L'ORDRE DES IMPORTS EST SIGNIFICATIF (cascade CSS) :
+// base → layout → components → features → responsive (toujours en dernier).
+@forward "base/reset";
+@forward "base/typography";
+@forward "layout/app-shell";
+@forward "layout/sidebar";
+@forward "layout/topbar";
+@forward "components/buttons";
+@forward "components/page-header";
+@forward "components/phase-tag";
+@forward "components/panel";
+@forward "components/modal";
+@forward "components/fatal-error";
+@forward "features/home/quick-cards";
+@forward "features/home/development-panel";
+@forward "features/editor/editor-layout";
+@forward "features/editor/preview";
+@forward "features/editor/inspector";
+@forward "features/editor/timeline";
+@forward "responsive";

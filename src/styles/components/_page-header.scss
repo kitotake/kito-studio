@@ -1,0 +1,14 @@
+@use "../abstracts/tokens" as *;
+
+.welcome-row, .section-heading, .editor-heading {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.welcome-row p, .editor-heading p {
+  margin: 0;
+  font-size: 12px;
+  color: $muted;
+}
