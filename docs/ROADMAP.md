@@ -11,12 +11,15 @@
 - [ ] Premier build Windows validé (`pnpm tauri dev` puis `pnpm tauri build`)
 
 ## Phase 1 — Projet et médias
-- [ ] Modèle de projet versionné
-- [ ] Création et sauvegarde `.kito`
+- [x] Modèle de projet versionné (`docs/KITO_FORMAT.md`)
+- [x] Création, ouverture et sauvegarde `.kito` (atomique, `.bak`)
+- [x] Sauvegarde automatique configurable et récupération après crash
+- [x] Projets récents, indicateur de sauvegarde, modifications non enregistrées
+- [x] Chemins de médias portables et reliage des médias
 - [ ] Boîte de dialogue d'importation
 - [ ] Probe des médias avec FFprobe
 - [ ] Miniatures
-- [ ] Détection des fichiers manquants
+- [x] Détection des fichiers manquants (le modèle les référence ; l'import les créera)
 
 ## Phase 2 — Timeline
 - [ ] Séquences et pistes

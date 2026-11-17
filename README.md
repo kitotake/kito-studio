@@ -4,18 +4,19 @@ Prototype initial d'un logiciel de montage vidéo multiplateforme.
 
 ## État actuel
 
-Cette archive contient les fondations de la Phase 0 :
+**Implémenté et testé (sous Linux ; Windows à valider)** :
 
-- Frontend React + TypeScript + Vite.
-- Design sombre responsive en SCSS.
-- Shell Tauri 2.
-- Backend Rust.
-- Commandes natives de diagnostic.
-- Détection de `ffmpeg` et `ffprobe` dans le `PATH`.
-- Écran d'accueil et première maquette d'espace de montage.
-- Formulaire de création de session de projet (en mémoire uniquement).
+- Création d'un projet : nom, emplacement, résolution (720p, 1080p, 1440p, 4K, vertical), fréquence d'images (24, 25, 30, 50, 60), fréquence audio (44,1, 48, 96 kHz).
+- Ouverture, enregistrement (atomique, avec copie `.bak`) et « Enregistrer sous » au format `.kito` versionné (`docs/KITO_FORMAT.md`).
+- Sauvegarde automatique configurable (Préférences) et récupération après un arrêt brutal, sans jamais écraser le dernier enregistrement.
+- Projets récents, indicateur de sauvegarde, confirmation avant de perdre des modifications (y compris à la fermeture de la fenêtre).
+- Détection des médias manquants ou modifiés, chemins relatifs portables d'un ordinateur à l'autre, reliage manuel ou par dossier.
+- Détection de `ffmpeg` / `ffprobe`.
+- Raccourcis : Ctrl+N (nouveau), Ctrl+O (ouvrir), Ctrl+S (enregistrer), Ctrl+Maj+S (enregistrer sous).
 
-**Important :** ce dépôt n'est pas encore un éditeur vidéo fonctionnel. La sauvegarde `.kito`, l'import média, la timeline éditable, le décodage et le rendu seront développés dans les prochaines étapes.
+**Pas encore fonctionnel** : importation de médias, timeline éditable, lecture, effets, audio, rendu et export. La timeline et le moniteur de l'éditeur sont des emplacements statiques ; le projet les stocke déjà (séquences, pistes, clips, effets, transitions, keyframes) mais l'interface ne les édite pas.
+
+Où sont les données : un projet est un dossier `<emplacement>/<nom>/` contenant `<nom>.kito`, éventuellement `<nom>.kito.bak` et `Autosave/`. Les préférences et la liste des récents sont dans le dossier de données de l'application (`%APPDATA%\com.kitotake.kitostudio` sous Windows).
 
 ## Prérequis Windows
 
@@ -91,13 +92,14 @@ Pré-requis supplémentaires : Android Studio, Android SDK, JDK et configuration
 
 ```powershell
 pnpm build            # TypeScript + Vite
+pnpm test             # tests React (Vitest)
 cd src-tauri
 cargo check           # backend Rust
-cargo test            # tests unitaires Rust
+cargo test            # tests Rust (unitaires + intégration)
 cargo fmt --check     # formatage Rust
 ```
 
-Voir `docs/AUDIT.md` pour l'état exact des tests.
+Voir `docs/TESTING.md` pour ce qui est couvert et ce qui ne l'est pas.
 
 ## Structure
 
@@ -111,7 +113,7 @@ src/
   styles/        SCSS par couche (abstracts, base, layout, components, features)
 src-tauri/       Application native Rust/Tauri (commands/, error.rs, modules métier)
 branding/        Sources des icônes (régénérer avec `pnpm tauri icon branding/app-icon.png`)
-docs/            Architecture, décisions, roadmap, audit
+docs/            Architecture, format .kito, décisions, roadmap, tests, audit
 ```
 
 Détail des couches et règles de dépendance : `docs/ARCHITECTURE.md`.

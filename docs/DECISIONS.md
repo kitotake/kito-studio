@@ -36,3 +36,30 @@ Choix : `useWorkspace` sépare `view` (accueil / éditeur) de `project`. Avant, 
 ## ADR-012 — Pas de bibliothèque d'état global pour l'instant
 Choix : `useState` + un contexte (`SystemStatus`). À réévaluer quand la timeline et le projet courant seront partagés par de nombreux composants (candidat : store léger avec historique undo/redo).
 
+## ADR-013 — Projet `.kito` : un seul fichier JSON versionné
+Choix : fichier JSON UTF-8 unique (pas d'archive pour l'instant), `formatVersion` + `minReaderVersion`, migrations sur le JSON brut avant typage. Le champ `format` permettra de changer de conteneur plus tard. Spécification : `docs/KITO_FORMAT.md`.
+
+## ADR-014 — Le document vit côté Rust
+Choix : `project::session::Session` détient le document ; l'interface reçoit des instantanés (`ProjectSnapshot`) et envoie des commandes. Évite de transférer toute la timeline à chaque modification et prépare undo/redo. L'état d'enregistrement (`dirty`) est calculé côté Rust par révisions.
+
+## ADR-015 — Temps en ticks entiers
+Choix : 705 600 000 ticks par seconde, entiers bornés à 2^53 − 1. Divisible exactement par les cadences et fréquences audio courantes ; aucune dérive d'arrondi.
+
+## ADR-016 — Conservation des données inconnues
+Choix : `#[serde(flatten)] extra` à chaque niveau du modèle, effets/transitions/keyframes en JSON brut. Un fichier d'une version plus récente et compatible ne perd rien en passant par cette version.
+
+## ADR-017 — Données déclaratives uniquement
+Choix : aucun champ du `.kito` n'est exécutable. Effets, transitions et keyframes = objets `{ "type": "...", ... }` à identifiant strict ; profondeur, taille et références bornées. Le futur moteur de rendu n'interprétera que des types connus.
+
+## ADR-018 — Enregistrement atomique et sauvegarde automatique séparée
+Choix : temporaire voisin + fsync + `.bak` + renommage. Les copies automatiques vont dans `Autosave/` et n'écrasent jamais le fichier principal ; une copie plus récente que le fichier est proposée après un arrêt brutal ; elle est chargée comme travail non enregistré. Intervalle minimal 1 minute.
+
+## ADR-019 — Médias : relatif d'abord, absolu ensuite, taille pour départager
+Choix : chemins relatifs (séparateur `/`) recalculés à chaque enregistrement. Le candidat de même taille est préféré. Liaison automatique par dossier uniquement pour les correspondances non ambiguës (nom + taille).
+
+## ADR-020 — Commandes de projet sur le pool de threads
+Choix : `#[tauri::command(async)]` pour toutes les commandes qui touchent au disque (les commandes synchrones s'exécutent sur le thread principal de l'interface). L'écriture de la sauvegarde automatique se fait hors verrou.
+
+## ADR-021 — Vitest et Testing Library
+Choix : tests React avec Vitest (même configuration que Vite) et Testing Library en jsdom ; l'API native est simulée au niveau du module `@/lib/tauri`. Voir `docs/TESTING.md`.
+

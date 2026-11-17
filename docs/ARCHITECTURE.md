@@ -23,7 +23,11 @@ L'interface ne manipule jamais FFmpeg, le disque ni les structures du moteur : e
 
 Règle : les dépendances vont toujours vers le bas (`app` → `features` → `components` → `lib` → `types`). Jamais l'inverse. Alias d'import : `@/` = `src/`.
 
-Features actuelles : `home`, `project` (dialogue et profil de création), `editor` (écran et 4 panneaux), `system` (état du backend partagé via contexte).
+Features actuelles :
+
+- `project` : tout ce qui concerne le projet ouvert — `ProjectProvider` (instantané du backend, occupation, erreur courante, copie de récupération, état de sauvegarde automatique), dialogues (création, paramètres, préférences, médias manquants, récupération, modifications non enregistrées), liste des récents, indicateur de sauvegarde, barre d'outils, hooks (`useUnsavedGuard`, `useCloseGuard`, `useProjectShortcuts`, `useRecentProjects`), messages d'erreur compréhensibles (`projectErrors.ts`).
+- `home` (accueil), `editor` (écran et 4 panneaux), `system` (état du backend partagé via contexte).
+- `app/Workspace.tsx` orchestre les flux (créer, ouvrir, enregistrer, fermer, récupérer) ; la navigation seule est dans `useWorkspace`.
 
 ### Styles (`src/styles/`)
 
@@ -34,14 +38,20 @@ Le fichier `main.scss` définit l'ordre des `@forward`. **Cet ordre est signific
 
 | Fichier / dossier | Rôle |
 |-------------------|------|
-| `lib.rs` | Déclare les modules et enregistre les commandes |
+| `lib.rs` | Déclare les modules, le plugin de dialogue, l'état géré, la boucle d'autosave, les commandes |
 | `error.rs` | `AppError` / `AppResult`, sérialisé en `{ code, message }` |
-| `commands/` | Frontière Tauri : valide l'entrée, délègue, retourne `AppResult`. Aucune logique métier |
-| `system.rs`, `media/` | Modules métier sans dépendance à Tauri, avec tests unitaires |
+| `state.rs` | État géré par Tauri : projet ouvert, préférences, dossier de données |
+| `commands/` | Frontière Tauri (`system`, `project`, `preferences`, `autosave`) : valide l'entrée, délègue, retourne `AppResult`. Aucune logique métier |
+| `project/` | Module Project (sans dépendance à Tauri) : `model` (format), `validate`, `migrate`, `io` (lecture validée, écriture atomique), `paths`, `media` (résolution portable), `names`, `autosave`, `recent`, `session` (document ouvert), `snapshot` (vues pour l'interface) |
+| `preferences.rs` | Préférences versionnées (`preferences.json`) |
+| `system.rs`, `media/` | Informations système, détection FFmpeg |
+| `timeutil.rs` | Horodatages UTC sans dépendance |
+
+Les commandes qui touchent au disque sont déclarées `#[tauri::command(async)]` : elles s'exécutent sur le pool de threads et jamais sur le thread de l'interface. La sauvegarde automatique tourne dans un thread dédié (`commands/autosave.rs`) : décision et sérialisation sous le verrou, écriture disque hors verrou.
 
 ### Contrat d'erreur
 
-Toute commande retourne `AppResult<T>`. En cas d'échec, l'interface reçoit `{ code, message }` et `invokeCommand` le convertit en `KitoError`. Codes Rust : `IO`, `INVALID_INPUT`, `NOT_FOUND`, `INTERNAL` ; codes côté interface : `UNAVAILABLE` (hors application native), `UNKNOWN`. Les deux listes (`error.rs` et `src/types/errors.ts`) doivent rester synchronisées. Les erreurs de rendu React sont rattrapées par `ErrorBoundary`.
+Toute commande retourne `AppResult<T>`. En cas d'échec, l'interface reçoit `{ code, message }` et `invokeCommand` le convertit en `KitoError`. Codes Rust : `IO`, `INVALID_INPUT`, `NOT_FOUND`, `ALREADY_EXISTS`, `PERMISSION_DENIED`, `DISK_FULL`, `INVALID_FORMAT`, `INCOMPATIBLE_VERSION`, `INTERNAL` ; `AppError::from_io` choisit le code le plus précis selon l'erreur système. Codes côté interface : `UNAVAILABLE` (hors application native), `UNKNOWN`. Les deux listes (`error.rs` et `src/types/errors.ts`) doivent rester synchronisées. `projectErrors.ts` transforme chaque code en titre + message + conseil. Les erreurs de rendu React sont rattrapées par `ErrorBoundary`.
 
 ### Ajouter une fonctionnalité
 
@@ -53,8 +63,8 @@ Toute commande retourne `AppResult<T>`. En cas d'échec, l'interface reçoit `{ 
 
 | Module visé | Rust | Frontend | État |
 |-------------|------|----------|------|
-| Project | — | `features/project` (création en mémoire) | à faire : `.kito` |
-| Media | `media/tools.rs` (détection FFmpeg) | `features/editor/panels/MediaPanel` (vide) | import/probe à faire |
+| Project | `project/` (format, session, sauvegardes, récents) | `features/project` | **fait** : créer, ouvrir, enregistrer, autosave, récupération, médias manquants |
+| Media | `media/tools.rs` (détection FFmpeg) ; `project/media.rs` (résolution des chemins) | `features/editor/panels/MediaPanel` (liste et état des médias du projet) | import/probe/miniatures à faire |
 | Timeline | — | `features/editor/panels/TimelinePanel` (statique) | à faire |
 | Playback | — | `features/editor/panels/PreviewPanel` (statique) | à faire |
 | Render, Export, Audio, Effects, Keyframes, Cache, Sync, AI | — | — | pas commencés, aucun code factice |
@@ -71,7 +81,7 @@ Avant la distribution, décider entre binaires FFmpeg externes, bibliothèques d
 
 ## Projet `.kito`
 
-Le format sera versionné. Le modèle logique sera indépendant du conteneur physique. Première cible : un manifeste JSON validé, puis un conteneur d'archive avec ressources facultatives.
+Spécification complète : `docs/KITO_FORMAT.md` (structure, temps en ticks, versions et migrations, conservation des données inconnues, sécurité déclarative, chemins portables, enregistrement atomique, sauvegarde automatique).
 
 ## Performance
 
