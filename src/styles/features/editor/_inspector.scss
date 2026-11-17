@@ -19,3 +19,9 @@
   color: #d7d8df;
   font-size: 10px;
 }
+
+.property strong {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

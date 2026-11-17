@@ -1,0 +1,21 @@
+.status-chip {
+  flex: 0 0 auto;
+  padding: 3px 8px;
+  border: 1px solid;
+  border-radius: 20px;
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: .04em;
+}
+
+.chip-missing {
+  border-color: #6a3340;
+  background: #2a1820;
+  color: #e7a3b0;
+}
+
+.chip-changed {
+  border-color: #6a5a33;
+  background: #2a2418;
+  color: #e7cf9c;
+}

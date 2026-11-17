@@ -1,0 +1,33 @@
+@use "../../abstracts/tokens" as *;
+
+.save-status {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  color: $muted;
+  font-size: 10px;
+  white-space: nowrap;
+}
+
+.save-status i {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: $success;
+}
+
+.save-dirty i {
+  background: #e7b04a;
+}
+
+.save-saving i {
+  background: $accent-2;
+}
+
+.save-error {
+  color: #e7a3b0;
+}
+
+.save-error i {
+  background: #e75a74;
+}

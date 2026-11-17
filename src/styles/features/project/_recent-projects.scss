@@ -1,0 +1,95 @@
+@use "../../abstracts/tokens" as *;
+
+.recent-panel {
+  margin-top: 26px;
+}
+
+.recent-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.recent-item {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  padding: 4px 12px 4px 4px;
+  border-bottom: 1px solid #282b34;
+}
+
+.recent-open {
+  flex: 1;
+  min-width: 0;
+  padding: 11px 12px;
+  border: 0;
+  border-radius: 7px;
+  background: transparent;
+  color: inherit;
+  text-align: left;
+}
+
+.recent-open:hover:not(:disabled) {
+  background: #ffffff08;
+}
+
+.recent-open:disabled {
+  cursor: not-allowed;
+}
+
+.recent-open strong,
+.recent-open small {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.recent-open strong {
+  color: #e2e3ea;
+  font-size: 11px;
+}
+
+.recent-open small {
+  margin-top: 5px;
+  color: $subtle;
+  font-size: 9px;
+}
+
+.recent-meta {
+  flex: 0 0 auto;
+  color: $muted;
+  font-size: 9px;
+}
+
+.recent-item.is-missing .recent-open strong,
+.recent-item.is-missing .recent-open small {
+  color: $subtle;
+  text-decoration: line-through;
+}
+
+.recent-item.is-missing .recent-meta {
+  color: #e7a3b0;
+}
+
+.recent-empty {
+  padding: 26px 16px;
+  text-align: center;
+}
+
+.recent-empty strong {
+  display: block;
+  font-size: 10px;
+}
+
+.recent-empty small {
+  display: block;
+  margin-top: 7px;
+  color: $subtle;
+  font-size: 9px;
+}
+
+.recent-footer {
+  padding: 10px 14px;
+  text-align: right;
+}

@@ -54,3 +54,26 @@
   border-radius: 7px;
   font-size: 10px;
 }
+
+.danger-button {
+  border: 1px solid #6a3340;
+  background: #2a1820;
+  color: #e7a3b0;
+  padding: 10px 14px;
+  border-radius: 7px;
+  font-size: 10px;
+}
+
+.danger-button:hover {
+  background: #3a2029;
+}
+
+.primary-button:disabled,
+.secondary-button:disabled,
+.danger-button:disabled,
+.close-button:disabled {
+  opacity: .45;
+  cursor: not-allowed;
+  transform: none;
+  filter: none;
+}

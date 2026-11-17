@@ -128,3 +128,8 @@
   font-size: 9px;
   padding: 17px 5px 0;
 }
+
+.nav-item:disabled {
+  opacity: .4;
+  cursor: not-allowed;
+}

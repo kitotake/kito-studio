@@ -1,0 +1,41 @@
+@use "../../abstracts/tokens" as *;
+
+.media-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  overflow-y: auto;
+  max-height: calc(100% - 39px);
+}
+
+.media-row {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 11px 12px;
+  border-bottom: 1px solid #282b34;
+}
+
+.media-row > div {
+  min-width: 0;
+}
+
+.media-row strong,
+.media-row small {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.media-row strong {
+  color: #d7d8df;
+  font-size: 10px;
+}
+
+.media-row small {
+  margin-top: 5px;
+  color: $subtle;
+  font-size: 8px;
+}
