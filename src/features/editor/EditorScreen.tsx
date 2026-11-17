@@ -1,11 +1,11 @@
 import { formatFrameRate, formatResolution, formatSampleRateKhz } from "@/features/project/format";
-import type { ProjectProfile } from "@/types/project";
+import type { ProjectSnapshot } from "@/types/project";
 import { InspectorPanel } from "./panels/InspectorPanel";
 import { MediaPanel } from "./panels/MediaPanel";
 import { PreviewPanel } from "./panels/PreviewPanel";
 import { TimelinePanel } from "./panels/TimelinePanel";
 
-export function EditorScreen({ project }: { project: ProjectProfile }) {
+export function EditorScreen({ project }: { project: ProjectSnapshot }) {
   return (
     <div className="editor-content">
       <div className="editor-heading">
@@ -20,7 +20,7 @@ export function EditorScreen({ project }: { project: ProjectProfile }) {
         <span className="phase-tag">ESQUISSE ÉDITEUR</span>
       </div>
       <div className="editor-grid">
-        <MediaPanel />
+        <MediaPanel media={project.media} />
         <PreviewPanel />
         <InspectorPanel project={project} />
         <TimelinePanel />

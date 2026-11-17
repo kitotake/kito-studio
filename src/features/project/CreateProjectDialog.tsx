@@ -1,78 +1,90 @@
 import { useId, useState } from "react";
 import { Modal } from "@/components/ui/Modal";
-import type { NewProjectInput } from "./createProjectProfile";
-import { DEFAULT_FRAME_RATE, FRAME_RATES, VIDEO_PROFILES } from "./projectProfiles";
+import { Notice } from "@/components/ui/Notice";
+import type { NewProjectInput } from "@/types/project";
+import { loadLastLocation } from "./lastLocation";
+import type { DescribedError } from "./projectErrors";
+import { ProjectSettingsFields } from "./ProjectSettingsFields";
+import { defaultSettingsForm, toSettingsInput } from "./settingsForm";
+import { validateProjectName } from "./validateProjectName";
 
 type CreateProjectDialogProps = {
+  busy: boolean;
+  error: DescribedError | null;
   onSubmit: (input: NewProjectInput) => void;
   onClose: () => void;
+  /** Ouvre le sélecteur de dossier natif ; `null` si annulé. */
+  onBrowse: () => Promise<string | null>;
 };
 
-export function CreateProjectDialog({ onSubmit, onClose }: CreateProjectDialogProps) {
-  const titleId = useId();
-  const [name, setName] = useState("Mon premier montage");
-  const [profileIndex, setProfileIndex] = useState(0);
-  const [frameRate, setFrameRate] = useState(DEFAULT_FRAME_RATE);
+function previewPath(location: string, name: string): string {
+  const separator = location.includes("\\") ? "\\" : "/";
+  const base = location.replace(/[\\/]+$/, "");
+  return `${base}${separator}${name}${separator}${name}.kito`;
+}
 
-  function handleSubmit() {
-    const profile = VIDEO_PROFILES[profileIndex];
-    if (!profile) return;
-    onSubmit({ name, width: profile.width, height: profile.height, frameRate });
+export function CreateProjectDialog({ busy, error, onSubmit, onClose, onBrowse }: CreateProjectDialogProps) {
+  const titleId = useId();
+  const [{ value: initialValue, extras }] = useState(() => defaultSettingsForm("Mon premier montage"));
+  const [value, setValue] = useState(initialValue);
+  const [location, setLocation] = useState(loadLastLocation);
+
+  const name = value.name.trim();
+  const canSubmit = !busy && validateProjectName(value.name) === null && location.trim() !== "";
+
+  async function browse() {
+    const picked = await onBrowse();
+    if (picked) setLocation(picked);
+  }
+
+  function submit() {
+    if (!canSubmit) return;
+    onSubmit({ ...toSettingsInput(value, extras), parentDir: location.trim() });
   }
 
   return (
-    <Modal titleId={titleId} onClose={onClose}>
+    <Modal titleId={titleId} onClose={busy ? () => undefined : onClose}>
       <div className="modal-top">
         <div>
           <div className="eyebrow">NOUVEAU PROJET</div>
-          <h2 id={titleId}>Configurer votre séquence</h2>
+          <h2 id={titleId}>Configurer votre projet</h2>
         </div>
-        <button className="close-button" onClick={onClose} aria-label="Fermer">
+        <button className="close-button" onClick={onClose} aria-label="Fermer" disabled={busy}>
           ×
         </button>
       </div>
 
-      <label>
-        Nom du projet
-        <input value={name} onChange={(event) => setName(event.target.value)} autoFocus />
-      </label>
+      <ProjectSettingsFields value={value} extras={extras} onChange={setValue} autoFocusName />
 
       <label>
-        Profil vidéo
-        <select
-          value={profileIndex}
-          onChange={(event) => setProfileIndex(Number(event.target.value))}
-        >
-          {VIDEO_PROFILES.map((profile, index) => (
-            <option value={index} key={profile.label}>
-              {profile.label} — {profile.width} × {profile.height}
-            </option>
-          ))}
-        </select>
+        Emplacement
+        <span className="path-row">
+          <input
+            value={location}
+            onChange={(event) => setLocation(event.target.value)}
+            placeholder="Dossier où créer le projet"
+            aria-label="Emplacement du projet"
+          />
+          <button type="button" className="secondary-button" onClick={() => void browse()}>
+            Parcourir…
+          </button>
+        </span>
       </label>
 
-      <label>
-        Fréquence d'images
-        <select value={frameRate} onChange={(event) => setFrameRate(Number(event.target.value))}>
-          {FRAME_RATES.map((rate) => (
-            <option value={rate} key={rate}>
-              {rate} FPS
-            </option>
-          ))}
-        </select>
-      </label>
+      {location.trim() !== "" && name !== "" ? (
+        <div className="path-preview" title={previewPath(location.trim(), name)}>
+          Fichier créé : <code>{previewPath(location.trim(), name)}</code>
+        </div>
+      ) : null}
 
-      <div className="modal-note">
-        Cette première version crée une session de travail en mémoire. La sauvegarde native au
-        format .kito sera ajoutée dans le module de gestion des projets.
-      </div>
+      {error ? <Notice tone="error" title={error.title} message={error.message} suggestion={error.suggestion} /> : null}
 
       <div className="modal-actions">
-        <button className="secondary-button" onClick={onClose}>
+        <button className="secondary-button" onClick={onClose} disabled={busy}>
           Annuler
         </button>
-        <button className="primary-button" onClick={handleSubmit}>
-          Créer le projet
+        <button className="primary-button" onClick={submit} disabled={!canSubmit}>
+          {busy ? "Création…" : "Créer le projet"}
         </button>
       </div>
     </Modal>

@@ -1,4 +1,14 @@
-import type { ProjectProfile } from "@/types/project";
+export type ProjectProfile = {
+  id: string;
+  name: string;
+  width: number;
+  height: number;
+  fpsNumerator: number;
+  fpsDenominator: number;
+  audioSampleRate: number;
+  createdAt: string;
+  schemaVersion: number;
+};
 
 export const PROJECT_SCHEMA_VERSION = 1;
 export const DEFAULT_AUDIO_SAMPLE_RATE = 48_000;

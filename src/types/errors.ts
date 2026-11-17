@@ -1,14 +1,20 @@
 /**
  * Codes d'erreur de l'application.
  *
- * - IO, INVALID_INPUT, NOT_FOUND, INTERNAL : émis par le backend Rust
- *   (voir `src-tauri/src/error.rs`, les deux listes doivent rester synchronisées).
- * - UNAVAILABLE, UNKNOWN : produits côté interface.
+ * - Émis par le backend Rust (voir `src-tauri/src/error.rs`, les deux listes doivent
+ *   rester synchronisées) : IO, INVALID_INPUT, NOT_FOUND, ALREADY_EXISTS,
+ *   PERMISSION_DENIED, DISK_FULL, INVALID_FORMAT, INCOMPATIBLE_VERSION, INTERNAL.
+ * - Produits côté interface : UNAVAILABLE, UNKNOWN.
  */
 export type ErrorCode =
   | "IO"
   | "INVALID_INPUT"
   | "NOT_FOUND"
+  | "ALREADY_EXISTS"
+  | "PERMISSION_DENIED"
+  | "DISK_FULL"
+  | "INVALID_FORMAT"
+  | "INCOMPATIBLE_VERSION"
   | "INTERNAL"
   | "UNAVAILABLE"
   | "UNKNOWN";

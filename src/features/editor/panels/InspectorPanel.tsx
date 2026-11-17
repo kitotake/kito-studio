@@ -1,13 +1,14 @@
 import { Panel } from "@/components/ui/Panel";
 import { formatFrameRate, formatResolution, formatSampleRateHz } from "@/features/project/format";
-import type { ProjectProfile } from "@/types/project";
+import type { ProjectSnapshot } from "@/types/project";
 
-export function InspectorPanel({ project }: { project: ProjectProfile }) {
+export function InspectorPanel({ project }: { project: ProjectSnapshot }) {
   const properties: ReadonlyArray<readonly [label: string, value: string]> = [
     ["Nom du projet", project.name],
     ["Résolution", formatResolution(project)],
     ["Fréquence", formatFrameRate(project)],
-    ["Échantillonnage audio", formatSampleRateHz(project)]
+    ["Échantillonnage audio", formatSampleRateHz(project)],
+    ["Emplacement", project.directory]
   ];
 
   return (
@@ -15,7 +16,7 @@ export function InspectorPanel({ project }: { project: ProjectProfile }) {
       {properties.map(([label, value]) => (
         <div className="property" key={label}>
           <small>{label}</small>
-          <strong>{value}</strong>
+          <strong title={value}>{value}</strong>
         </div>
       ))}
     </Panel>

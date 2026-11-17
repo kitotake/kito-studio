@@ -1,32 +1,20 @@
 import { useCallback, useState } from "react";
-import type { ProjectProfile } from "@/types/project";
 import type { WorkspaceView } from "@/types/workspace";
 
+export type WorkspaceDialog = "create" | "settings" | "preferences";
+
 /**
- * État de navigation et projet courant.
- * La vue est distincte du projet : revenir à l'accueil ne ferme pas le projet.
+ * État de navigation et de dialogues. Le projet ouvert vit dans `ProjectProvider` :
+ * revenir à l'accueil ne ferme jamais le projet.
  */
 export function useWorkspace() {
-  const [project, setProject] = useState<ProjectProfile | null>(null);
   const [view, setView] = useState<WorkspaceView>("home");
-  const [isCreateOpen, setCreateOpen] = useState(false);
+  const [dialog, setDialog] = useState<WorkspaceDialog | null>(null);
 
-  const openProject = useCallback((next: ProjectProfile) => {
-    setProject(next);
-    setView("editor");
-    setCreateOpen(false);
-  }, []);
+  const showHome = useCallback(() => setView("home"), []);
+  const showEditor = useCallback(() => setView("editor"), []);
+  const openDialog = useCallback((next: WorkspaceDialog) => setDialog(next), []);
+  const closeDialog = useCallback(() => setDialog(null), []);
 
-  const navigate = useCallback(
-    (next: WorkspaceView) => {
-      if (next === "editor" && project === null) return;
-      setView(next);
-    },
-    [project]
-  );
-
-  const openCreateDialog = useCallback(() => setCreateOpen(true), []);
-  const closeCreateDialog = useCallback(() => setCreateOpen(false), []);
-
-  return { project, view, isCreateOpen, openProject, navigate, openCreateDialog, closeCreateDialog };
+  return { view, dialog, showHome, showEditor, openDialog, closeDialog };
 }

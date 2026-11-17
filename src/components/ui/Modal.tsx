@@ -4,17 +4,23 @@ type ModalProps = {
   /** Identifiant du titre, référencé par aria-labelledby. */
   titleId: string;
   onClose: () => void;
+  wide?: boolean;
   children: ReactNode;
 };
 
-export function Modal({ titleId, onClose, children }: ModalProps) {
+export function Modal({ titleId, onClose, wide = false, children }: ModalProps) {
   return (
     <div
       className="modal-backdrop"
       role="presentation"
       onMouseDown={(event) => event.target === event.currentTarget && onClose()}
     >
-      <section className="modal" role="dialog" aria-modal="true" aria-labelledby={titleId}>
+      <section
+        className={wide ? "modal modal-wide" : "modal"}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby={titleId}
+      >
         {children}
       </section>
     </div>

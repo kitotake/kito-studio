@@ -7,7 +7,7 @@ type Milestone = {
 const MILESTONES: readonly Milestone[] = [
   { title: "Interface de base", description: "Structure et thème sombre", done: true },
   { title: "Backend Rust", description: "Commandes natives initiales", done: true },
-  { title: "Gestion des projets", description: "Format .kito et sauvegarde", done: false },
+  { title: "Gestion des projets", description: "Format .kito et sauvegarde", done: true },
   { title: "Importation média", description: "Analyse et prévisualisation", done: false }
 ];
 
@@ -19,7 +19,7 @@ export function DevelopmentPanel() {
           <div className="eyebrow">DÉVELOPPEMENT</div>
           <h2>Votre studio prend forme</h2>
         </div>
-        <span className="phase-tag">PHASE 0 · FONDATIONS</span>
+        <span className="phase-tag">PHASE 1 · PROJETS</span>
       </div>
       <div className="milestones">
         {MILESTONES.map((milestone, index) => (

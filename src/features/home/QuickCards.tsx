@@ -16,7 +16,12 @@ function describeMediaTools(status: SystemStatus): string {
   }
 }
 
-export function QuickCards({ onCreateProject }: { onCreateProject: () => void }) {
+type QuickCardsProps = {
+  onCreateProject: () => void;
+  onOpenProject: () => void;
+};
+
+export function QuickCards({ onCreateProject, onOpenProject }: QuickCardsProps) {
   const systemStatus = useSystemStatus();
 
   return (
@@ -25,7 +30,7 @@ export function QuickCards({ onCreateProject }: { onCreateProject: () => void })
         <div className="card-icon">✦</div>
         <div className="card-kicker">COMMENCER</div>
         <h2>Créer un montage</h2>
-        <p>Configurez une séquence et préparez votre espace de travail.</p>
+        <p>Choisissez un nom, un emplacement et le format de votre séquence.</p>
         <button className="text-button" onClick={onCreateProject}>
           Créer un projet <span>→</span>
         </button>
@@ -34,11 +39,11 @@ export function QuickCards({ onCreateProject }: { onCreateProject: () => void })
       <article className="quick-card">
         <div className="card-icon muted-icon">▧</div>
         <div className="card-kicker">VOTRE ESPACE</div>
-        <h2>Projets récents</h2>
-        <p>
-          La gestion persistante des projets arrive dans la première étape du moteur projet.
-        </p>
-        <span className="subtle-note">Aucun projet enregistré</span>
+        <h2>Ouvrir un projet</h2>
+        <p>Reprenez un fichier .kito existant, d'ici ou d'un autre ordinateur.</p>
+        <button className="text-button" onClick={onOpenProject}>
+          Ouvrir… <span>→</span>
+        </button>
       </article>
 
       <article className="quick-card">
